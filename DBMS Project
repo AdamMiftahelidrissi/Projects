@@ -1,0 +1,35 @@
+//DBMS Project
+
+//1. The product p1 is deleted from Product and Stock.
+
+//By using "BEGIN TRANSACTION" and "COMMIT" we are ensuring ACID compliance.
+//It allows for a group of statements to be treated as a singular transaction.
+//If the transaction fails then it does not occur at all and we can use "ROLLBACK" to go back to the previous saved state.
+//"COMMIT" allows for successfull transactions to be final and promotes durability.
+
+BEGIN TRANSACTION;
+DELETE FROM stock WHERE prod_id = 'p1';
+DELETE FROM product WHERE prod_id = 'p1';
+COMMIT;
+
+//2. The depot d1 is deleted from Depot and Stock.
+
+BEGIN TRANSACTION;
+DELETE FROM stock WHERE dep_id = 'd1';
+DELETE FROM depot WHERE dep_id = 'd1';
+COMMIT;
+
+//5. We add a product (p100, cd, 5) in Product and (p100, d2, 50) in Stock.
+
+BEGIN TRANSACTION;
+INSERT INTO product (prod_id, pname, price) VALUES ('p100', 'cd', 5);
+INSERT INTO stock (prod_id, dep_id, quantity) VALUES ('p100', 'd2', 50);
+COMMIT;
+
+//6. We add a depot (d100, Chicago, 100) in Depot and (p1, d100, 100) in Stock.
+
+BEGIN TRANSACTION;
+INSERT INTO product (prod_id, pname, price) VALUES ('p1', 'rope', 10);  //need to put insert into product the prod_id so that we can insert into stock the prod_id.
+INSERT INTO depot (dep_id, addr, volume) VALUES ('d100', 'Chicago', 100);
+INSERT INTO stock (prod_id, dep_id, quantity) VALUES ('p1', 'd100', 100); //stock's prod_id is a foreign key of product's prod_id.
+COMMIT;
